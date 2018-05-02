@@ -20,7 +20,7 @@ def hebCar(x):
     if( u"\u0590" <= x <= u"\u05EA"):
         return True
     return False
-print("Starting to create wiki corpus")
+# print("Starting to create wiki corpus")
 output = open(outp, 'w')
 space = " "
 wiki = MyWikiCorpus(inp)
