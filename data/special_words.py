@@ -10,4 +10,3 @@ EOS_ID = 0
 # Unknown.
 UNK = "<unk>"
 UNK_ID = 1
-print "kjddfszsd;lzkc;kldc;k"

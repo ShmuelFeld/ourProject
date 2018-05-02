@@ -27,7 +27,7 @@ from data import special_words
 
 FLAGS = tf.flags.FLAGS
 
-tf.flags.DEFINE_string("input_files", None,
+tf.flags.DEFINE_string("input_files", "../inputFiles_Heb/*.txt",
                        "Comma-separated list of globs matching the input "
                        "files. The format of the input files is assumed to be "
                        "a list of newline-separated sentences, where each "
@@ -40,7 +40,7 @@ tf.flags.DEFINE_string("vocab_file", "",
                        "where the word id is the corresponding 0-based index "
                        "in the file.")
 
-tf.flags.DEFINE_string("output_dir", None, "Output directory.")
+tf.flags.DEFINE_string("output_dir", "${HOME}/ourProject/data", "Output directory.")
 
 tf.flags.DEFINE_integer("train_output_shards", 100,
                         "Number of output shards for the training set.")
@@ -232,6 +232,8 @@ def _write_dataset(name, dataset, indices, num_shards):
 
 
 def main(unused_argv):
+
+  wor = os.getcwd()
   if not FLAGS.input_files:
     raise ValueError("--input_files is required.")
   if not FLAGS.output_dir:
@@ -247,7 +249,7 @@ def main(unused_argv):
       raise ValueError("Found no files matching %s" % pattern)
     input_files.extend(match)
   tf.logging.info("Found %d input files.", len(input_files))
-
+  # here I want to add the filter function!
   vocab = _build_vocabulary(input_files)
 
   tf.logging.info("Generating dataset.")
