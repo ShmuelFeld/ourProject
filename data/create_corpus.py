@@ -26,7 +26,7 @@ output = open(outp, 'w')
 space = " "
 wiki = MyWikiCorpus(inp)
 # wiki = WikiCorpus(inp, lemmatize=False, dictionary={})
-
+#dfgdfg
 for text in wiki.get_texts():
     # for t in text:
     #     print(t)
