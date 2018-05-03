@@ -3,7 +3,7 @@
 from gensim.corpora import WikiCorpus
 from mywikicorpus import MyWikiCorpus
 inp = "../hewiki-latest-pages-articles.xml.bz2"
-#inp = "../test_for_debug.xml.bz2"
+inp = "../test_for_debug.xml.bz2"
 
 outp = "wiki.he.text"
 i = 0
@@ -36,6 +36,7 @@ for text in wiki.get_texts():
     m = article.replace(". ", '\n').replace(", ", " ").replace("-", " ").replace(":", " ").replace("'''","")
     n = filter(lambda x: hebCarOrSpace(x), m)
     # for arti in article
+#    output.write("{}\n".format(n.encode("utf-8")))
     output.write("{}\n".format(n.encode("utf-8")))
     i += 1
     if (i % 1000 == 0):

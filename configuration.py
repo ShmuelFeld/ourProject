@@ -66,13 +66,13 @@ def model_config(input_file_pattern=None,
   return config
 
 
-def training_config(learning_rate=0.9,
+def training_config(learning_rate=0.0008,
                     learning_rate_decay_factor=0.5,
-                    learning_rate_decay_steps=3,
-                    number_of_steps=5,
+                    learning_rate_decay_steps=400000,
+                    number_of_steps=500000,
                     clip_gradient_norm=5.0,
-                    save_model_secs=60,
-                    save_summaries_secs=60):
+                    save_model_secs=600,
+                    save_summaries_secs=600):
   """Creates a training configuration object.
   Args:
     learning_rate: Initial learning rate.
