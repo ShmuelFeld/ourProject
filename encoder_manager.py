@@ -29,7 +29,7 @@ from __future__ import division
 from __future__ import print_function
 
 import collections
-
+import vocabulary_expansion as ve
 
 import numpy as np
 import tensorflow as tf
@@ -60,13 +60,15 @@ class EncoderManager(object):
     tf.logging.info("Reading vocabulary from %s", vocabulary_file)
     with tf.gfile.GFile(vocabulary_file, mode="r") as f:
       lines = list(f.readlines())
-    reverse_vocab = [line.decode("utf-8").strip() for line in lines]
+    reverse_vocab = [line.strip() for line in lines]
     tf.logging.info("Loaded vocabulary with %d words.", len(reverse_vocab))
 
     tf.logging.info("Loading embedding matrix from %s", embedding_matrix_file)
     # Note: tf.gfile.GFile doesn't work here because np.load() calls f.seek()
     # with 3 arguments.
-    embedding_matrix = np.load(embedding_matrix_file)
+    # embedding_matrix = np.load(embedding_matrix_file)
+    # embedding_matrix = self._load_skip_thoughts_embeddings(checkpoint_path)
+    embedding_matrix = ve._load_skip_thoughts_embeddings(checkpoint_path)
     tf.logging.info("Loaded embedding matrix with shape %s",
                     embedding_matrix.shape)
 
@@ -125,3 +127,28 @@ class EncoderManager(object):
     """Closes the active TensorFlow Sessions."""
     for sess in self.sessions:
         sess.close()
+
+  def _load_skip_thoughts_embeddings(self, checkpoint_path):
+      """Loads the embedding matrix from a skipThoughts model checkpoint.
+      Args:
+        checkpoint_path: Model checkpoint file or directory containing a checkpoint
+            file.
+      Returns:
+        word_embedding: A numpy array of shape [vocab_size, embedding_dim].
+      Raises:
+        ValueError: If no checkpoint file matches checkpoint_path.
+      """
+      if tf.gfile.IsDirectory(checkpoint_path):
+          checkpoint_file = tf.train.latest_checkpoint(checkpoint_path)
+          if not checkpoint_file:
+              raise ValueError("No checkpoint file found in %s" % checkpoint_path)
+      else:
+          checkpoint_file = checkpoint_path
+
+      tf.logging.info("Loading skipThoughts embedding matrix from %s",
+                      checkpoint_file)
+      reader = tf.train.NewCheckpointReader(checkpoint_file)
+      word_embedding = reader.get_tensor("word_embedding")
+      tf.logging.info("Loaded skipThoughts embedding matrix of shape %s",
+                      word_embedding.shape)
+      return word_embedding

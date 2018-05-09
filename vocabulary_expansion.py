@@ -67,8 +67,20 @@ def _load_skip_thoughts_embeddings(checkpoint_path):
 
   tf.logging.info("Loading skipThoughts embedding matrix from %s",
                   checkpoint_file)
+  # word_embedding = tf.get_variable("word_embedding", shape=[20000, 620])
+  #
+  # saver = tf.train.Saver()
+  #
+  # with tf.Session() as sess:
+  #
+  #   saver.restore(sess, "./model/train/model.ckpt-22638")
+  #   np.save('model/train/word_embedding.npy', word_embedding.eval())
+
   reader = tf.train.NewCheckpointReader(checkpoint_file)
+  # var_name_list = [v.name for v in tf.trainable_variables()]
+  # var_to_shape_map = reader.get_variable_to_shape_map()
   word_embedding = reader.get_tensor("word_embedding")
+
   tf.logging.info("Loaded skipThoughts embedding matrix of shape %s",
                   word_embedding.shape)
   return word_embedding
